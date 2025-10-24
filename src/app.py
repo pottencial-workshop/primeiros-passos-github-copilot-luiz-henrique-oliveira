@@ -38,6 +38,42 @@ activities = {
       "schedule": "Segundas, quartas e sextas, 14h - 15h",
       "max_participants": 30,
       "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+   },
+   "Basquete": {
+      "description": "Treinamento de basquete e participação em jogos escolares",
+      "schedule": "Terças e quintas, 16h - 17h30",
+      "max_participants": 15,
+      "participants": ["alex@mergington.edu", "sarah@mergington.edu"]
+   },
+   "Natação": {
+      "description": "Aulas de natação e técnicas de nado",
+      "schedule": "Segundas e quartas, 17h - 18h",
+      "max_participants": 12,
+      "participants": ["lucas@mergington.edu"]
+   },
+   "Teatro": {
+      "description": "Desenvolvimento de habilidades teatrais e apresentações",
+      "schedule": "Sextas, 14h - 16h",
+      "max_participants": 18,
+      "participants": ["maria@mergington.edu", "pedro@mergington.edu"]
+   },
+   "Música": {
+      "description": "Aulas de instrumentos musicais e formação de banda",
+      "schedule": "Quartas, 15h - 17h",
+      "max_participants": 16,
+      "participants": ["ana@mergington.edu", "carlos@mergington.edu", "julia@mergington.edu"]
+   },
+   "Clube de Debate": {
+      "description": "Desenvolva habilidades de argumentação e debate",
+      "schedule": "Terças, 16h - 17h30",
+      "max_participants": 14,
+      "participants": ["rafael@mergington.edu", "laura@mergington.edu"]
+   },
+   "Clube de Ciências": {
+      "description": "Experimentos científicos e projetos de pesquisa",
+      "schedule": "Quintas, 15h - 16h30",
+      "max_participants": 10,
+      "participants": ["bruno@mergington.edu"]
    }
 }
 
@@ -55,6 +91,10 @@ def get_activities():
 @app.post("/activities/{activity_name}/signup")
 def signup_for_activity(activity_name: str, email: str):
     """Sign up a student for an activity"""
+    # Validar se o email já está inscrito
+    for activity in activities.values():
+        if email in activity["participants"]:
+            raise HTTPException(status_code=400, detail="Email já inscrito em uma atividade")
     # Validate activity exists
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Atividade não encontrada")
